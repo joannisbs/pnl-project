@@ -9,7 +9,11 @@ from string import punctuation
 
 
 class FinancialPoliticalPredictor:
-  _globalListOfTypes = [];
+  _globalListOfTypesAndWeights = {};
+  _defaultPrimaryAdjust = 0;
+  
+  def __init__(this):
+    this.memory = Memory();
   
   
   def training(this, discurso, result):
@@ -17,6 +21,8 @@ class FinancialPoliticalPredictor:
     sentences = this.__getSentences(discurso);
     types = set(tokens);
     TFIDFMatrix = this.__computeTF_IDF(types, sentences);
+    predict = this.__predict(TFIDFMatrix, sentences);
+    print(predict)
     # print(len(set(tokens)))
     # print(len(set(tokens)) / len(tokens))
     
@@ -49,7 +55,7 @@ class FinancialPoliticalPredictor:
       idfValue = this.__computeIDF(word, sentences)
       for count, sent in enumerate(sentences):
         tfValue = this.__computeTf(word, sent);
-        TfIdfList['sent'+str(count)] = idfValue * tfValue;
+        TfIdfList[count] = idfValue * tfValue;
       TfIdfObjectMatrix[word]=TfIdfList;
     return TfIdfObjectMatrix;
   
@@ -67,9 +73,53 @@ class FinancialPoliticalPredictor:
         count = count + 1;
       
     numSentences = len(sentences);
-    print(numSentences, count, word)
     idf = math.log10(float(numSentences)/ float(count));
     return idf;
   
+  def __predict(this, tfdif, sentences):
+    global _defaultPrimaryAdjust;
+    
+    weights = 0;
+    for count, sent in enumerate(sentences):
+      tokens = this.__getTokens(sent);
+      words = set(tokens);
+      weightOfSentence = 0;
+      for word in words:
+        peso = this.memory.getWeightToken(word);
+        weightOfWord = tfdif[word][count] * peso;
+        weightOfSentence = weightOfSentence + weightOfWord;
+      weights = weights + weightOfSentence;
+      
+    return weights + this.memory.getDefaultSistemicCorrection();
+        
+        
+       
+    
+    
+    
   
   
+# word: peso, -
+
+
+class Memory:
+  def __init__(this):
+    this._weights = {};
+    this._defaultSistemicCorrection = 0;
+    
+  def setWeightToken(this, token, value):
+    this._weights[token] = value;
+    
+  def getWeightToken(this, token):
+    if token in this._weights:
+      return this._weights[token];
+    this._weights[token] = 1;
+    return 1;
+  
+  def setDefaultSistemicCorrection(this, value):
+    this._defaultSistemicCorrection = value;
+    
+  def getDefaultSistemicCorrection(this):
+    return this._defaultSistemicCorrection;
+    
+    
