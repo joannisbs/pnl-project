@@ -15,3 +15,4 @@ for line in lines:
   text = file.read();
   result = columns[3]
   fpp.training(text, result)
+  break;
