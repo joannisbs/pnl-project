@@ -15,5 +15,5 @@ for line in lines:
   text = file.read();
   result = columns[3];
   resultFormated = float(result.replace(',','.'));
-  fpp.training(text, resultFormated)
-  break;
+  predict = fpp.training(text, resultFormated);
+  print('Discurso: ' + columns[0], 'predict: ' + str(predict), 'result: ' + str(resultFormated));

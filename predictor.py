@@ -20,11 +20,9 @@ class FinancialPoliticalPredictor:
     types = set(tokens);
     TFIDFMatrix = this.__computeTF_IDF(types, sentences);
     predict = this.__computePredict(TFIDFMatrix, sentences);
-    print(predict)
     this.__computeCorrection(predict, result, TFIDFMatrix, types);
-    this.memory.printWeghts();
-    # print(len(set(tokens)))
-    # print(len(set(tokens)) / len(tokens))
+    return predict;
+
     
   def __getTokens(this, text):
     # Obtendo os tokens do discurso
@@ -93,7 +91,8 @@ class FinancialPoliticalPredictor:
     err = result - predict;
     sistemicFactor = LEARN_FACTOR * err;
     oldSistemicErr = this.memory.getDefaultSistemicCorrection();
-    newSistemicErr = oldSistemicErr - sistemicFactor;
+    newSistemicErr = oldSistemicErr + sistemicFactor;
+    this.memory.setDefaultSistemicCorrection(newSistemicErr);
     for word in types:
       peso = this.memory.getWeightToken(word);
       # qual é o peso relevante desta palavra no discurso?
@@ -104,7 +103,7 @@ class FinancialPoliticalPredictor:
         relevance = relevance + tdfis_word[tfdif];
       # print(word, relevance)
       factor = LEARN_FACTOR * err * relevance;
-      newPeso = peso - factor;
+      newPeso = peso + factor;
       this.memory.setWeightToken(word, newPeso);
   
 
@@ -119,8 +118,8 @@ class Memory:
   def getWeightToken(this, token):
     if token in this._weights:
       return this._weights[token];
-    this._weights[token] = 1;
-    return 1;
+    this._weights[token] = 0;
+    return 0;
   
   def setDefaultSistemicCorrection(this, value):
     this._defaultSistemicCorrection = value;
