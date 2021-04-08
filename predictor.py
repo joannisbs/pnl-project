@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import re
 import nltk
 import math
@@ -6,26 +7,24 @@ from nltk.tokenize import sent_tokenize
 from nltk.corpus import stopwords as NltkStopWords
 from string import punctuation
 
-
+LEARN_FACTOR = 0.7;
 
 class FinancialPoliticalPredictor:
-  _globalListOfTypesAndWeights = {};
-  _defaultPrimaryAdjust = 0;
-  
+
   def __init__(this):
     this.memory = Memory();
-  
   
   def training(this, discurso, result):
     tokens = this.__getTokens(discurso);
     sentences = this.__getSentences(discurso);
     types = set(tokens);
     TFIDFMatrix = this.__computeTF_IDF(types, sentences);
-    predict = this.__predict(TFIDFMatrix, sentences);
+    predict = this.__computePredict(TFIDFMatrix, sentences);
     print(predict)
+    this.__computeCorrection(predict, result, TFIDFMatrix, types);
+    this.memory.printWeghts();
     # print(len(set(tokens)))
     # print(len(set(tokens)) / len(tokens))
-    
     
   def __getTokens(this, text):
     # Obtendo os tokens do discurso
@@ -76,9 +75,7 @@ class FinancialPoliticalPredictor:
     idf = math.log10(float(numSentences)/ float(count));
     return idf;
   
-  def __predict(this, tfdif, sentences):
-    global _defaultPrimaryAdjust;
-    
+  def __computePredict(this, tfdifs, sentences):
     weights = 0;
     for count, sent in enumerate(sentences):
       tokens = this.__getTokens(sent);
@@ -86,21 +83,30 @@ class FinancialPoliticalPredictor:
       weightOfSentence = 0;
       for word in words:
         peso = this.memory.getWeightToken(word);
-        weightOfWord = tfdif[word][count] * peso;
+        weightOfWord = tfdifs[word][count] * peso;
         weightOfSentence = weightOfSentence + weightOfWord;
       weights = weights + weightOfSentence;
       
     return weights + this.memory.getDefaultSistemicCorrection();
         
-        
-       
-    
-    
-    
+  def __computeCorrection(this, predict, result, tfdifs, types):
+    err = result - predict;
+    sistemicFactor = LEARN_FACTOR * err;
+    oldSistemicErr = this.memory.getDefaultSistemicCorrection();
+    newSistemicErr = oldSistemicErr - sistemicFactor;
+    for word in types:
+      peso = this.memory.getWeightToken(word);
+      # qual é o peso relevante desta palavra no discurso?
+      tdfis_word = tfdifs[word];
+      # print(word, tdfis_word)
+      relevance = 0;
+      for tfdif in tdfis_word:
+        relevance = relevance + tdfis_word[tfdif];
+      # print(word, relevance)
+      factor = LEARN_FACTOR * err * relevance;
+      newPeso = peso - factor;
+      this.memory.setWeightToken(word, newPeso);
   
-  
-# word: peso, -
-
 
 class Memory:
   def __init__(this):
@@ -121,5 +127,7 @@ class Memory:
     
   def getDefaultSistemicCorrection(this):
     return this._defaultSistemicCorrection;
-    
+  
+  def printWeghts(this):
+    print(this._weights);
     
