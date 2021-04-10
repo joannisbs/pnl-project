@@ -7,7 +7,7 @@ from nltk.tokenize import sent_tokenize
 from nltk.corpus import stopwords as NltkStopWords
 from string import punctuation
 
-LEARN_FACTOR = 0.7;
+LEARN_FACTOR = 0.1;
 
 class FinancialPoliticalPredictor:
 
@@ -59,6 +59,8 @@ class FinancialPoliticalPredictor:
   def __computeTf(this, word, sentence):
     count = len(re.findall(word, sentence))
     tokens = this.__getTokens(sentence);
+    if len(tokens) == 0:
+      return 0;
     tfValue = float(count)/float(len(tokens));
     return tfValue;
   
