@@ -7,6 +7,9 @@ from nltk.tokenize import sent_tokenize
 from nltk.corpus import stopwords as NltkStopWords
 from string import punctuation
 
+
+from memory import Memory;
+
 LEARN_FACTOR = 0.1;
 
 class FinancialPoliticalPredictor:
@@ -22,8 +25,23 @@ class FinancialPoliticalPredictor:
     predict = this.__computePredict(TFIDFMatrix, sentences);
     this.__computeCorrection(predict, result, TFIDFMatrix, types);
     return predict;
-
+  
+  def testing(this, discurso):
+    tokens = this.__getTokens(discurso);
+    sentences = this.__getSentences(discurso);
+    types = set(tokens);
+    TFIDFMatrix = this.__computeTF_IDF(types, sentences);
+    predict = this.__computePredict(TFIDFMatrix, sentences);
     
+    this.lastPredict = predict;
+    this.lastTFIDFMatrix = TFIDFMatrix;
+    this.lastTypes = types;
+    
+    return predict;
+  
+  def correctLastTest(this, result):
+    this.__computeCorrection(this.lastPredict, result, this.lastTFIDFMatrix, this.lastTypes);
+
   def __getTokens(this, text):
     # Obtendo os tokens do discurso
     tokens = word_tokenize(text);
@@ -109,26 +127,26 @@ class FinancialPoliticalPredictor:
       this.memory.setWeightToken(word, newPeso);
   
 
-class Memory:
-  def __init__(this):
-    this._weights = {};
-    this._defaultSistemicCorrection = 0;
+# class Memory:
+#   def __init__(this):
+#     this._weights = {};
+#     this._defaultSistemicCorrection = 0;
     
-  def setWeightToken(this, token, value):
-    this._weights[token] = value;
+#   def setWeightToken(this, token, value):
+#     this._weights[token] = value;
     
-  def getWeightToken(this, token):
-    if token in this._weights:
-      return this._weights[token];
-    this._weights[token] = 0;
-    return 0;
+#   def getWeightToken(this, token):
+#     if token in this._weights:
+#       return this._weights[token];
+#     this._weights[token] = 0;
+#     return 0;
   
-  def setDefaultSistemicCorrection(this, value):
-    this._defaultSistemicCorrection = value;
+#   def setDefaultSistemicCorrection(this, value):
+#     this._defaultSistemicCorrection = value;
     
-  def getDefaultSistemicCorrection(this):
-    return this._defaultSistemicCorrection;
+#   def getDefaultSistemicCorrection(this):
+#     return this._defaultSistemicCorrection;
   
-  def printWeghts(this):
-    print(this._weights);
+#   def printWeghts(this):
+#     print(this._weights);
     
