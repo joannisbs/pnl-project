@@ -58,3 +58,23 @@ class Measures:
   def f1_score(precision, recall):
     f1Measure = (2 * precision * recall) / (precision + recall)
     return math.floor(f1Measure);
+
+  def valueStatistic(listValues):
+    sommationOfValues = 0;
+    for value in listValues:
+      sommationOfValues += value;
+      
+    media = sommationOfValues/float(len(listValues));
+    
+    sumMinimunSqrt = 0;
+    for value in listValues:
+      sommationOfValues += (math.pow((value - media), 2));
+      
+    dirpersionSqrt = sommationOfValues/float(len(listValues) - 1);
+    
+    dispersion = math.pow(dirpersionSqrt, 1/2);
+    
+    lenSquad = math.pow(len(listValues), 1/2);
+    defaultError = dispersion/lenSquad;
+    
+    return math.floor(media), math.floor(dispersion), math.floor(defaultError);

@@ -28,24 +28,77 @@ def main():
 
   lines.pop(0);
   interationLogFile = Logger(dirName + '/interation_L01_I01.txt');
-  bateryLogFile = Logger(dirName + '/batery_tests.txt');
-  # learFactorLogFile = Logger(dirName + '/learFactor_tests.txt');
+  bateryLogFile = Logger(dirName + '/batery_tests.tsv');
+  learFactorLogFile = Logger(dirName + '/learFactor_tests.tsv');
   # resumeLogFile = Logger(dirName + '/resume_tests.txt');
   
-  learnFactor = 0.001;
-  learFactorPass = 0.02;
-  learnFactorMax = 0.3;
+  bateryTestsString = ("Taxa_aprendizado" + "\t" + "Interação" + "\t" + "Acuracia" + "\t" 
+        + "Precisão" + "\t" + "Recall" + "\t" + "F1_score");
+  bateryLogFile.write(bateryTestsString);
+  
+  learnTestsString = ("learnFactor" + "\t" + "acuracia_media" + "\t" 
+        + "acuracia_dispersion" + "\t" + "acuracia_defaultError" + "precision_media" + "\t" 
+        + "precision_dispersion" + "\t" + "precision_defaultError" + "recall_media" + "\t" 
+        + "recall_dispersion" + "\t" + "recall_defaultError" + "f1_score_media" + "\t" 
+        + "f1_score_dispersion" + "\t" + "f1_score_defaultError");
+    
+  learFactorLogFile.write(learnTestsString);
+      
+  learnFactor = 0.01;
+  learFactorPass = 0.03;
+  learnFactorMax = 0.8;
+  
   while learnFactor < learnFactorMax:
-    for index in range(10):
+    accuracyValues = [];
+    precisionValues = [];
+    recallValues = [];
+    scoresValues = [];
+    
+    
+    for index in range(9):
+      print( 'learn :' + str(learnFactor) + ' interation: ' + str(index));
       accuracy, precision, recall, f1_score = newInteration(lines, learnFactor, interationLogFile);
       bateryTestsString = (str(learnFactor) + "\t" + str(index) + "\t" + str(accuracy) + "\t" 
         + str(precision) + "\t" + str(recall) + "\t" + str(f1_score));
       bateryLogFile.write(bateryTestsString);
+      
+      accuracyValues.append(accuracy);
+      precisionValues.append(precision);
+      recallValues.append(recall);
+      scoresValues.append(f1_score);
+
+    acuracia_media, acuracia_dispersion, acuracia_defaultError = Measures.valueStatistic(accuracyValues);
+    
+    precision_media, precision_dispersion, precision_defaultError = Measures.valueStatistic(accuracyValues);
+    
+    recall_media, recall_dispersion, recall_defaultError = Measures.valueStatistic(accuracyValues);
+    
+    f1_score_media, f1_score_dispersion, f1_score_defaultError = Measures.valueStatistic(accuracyValues);
+    
+    learnTestsString = (str(learnFactor) + "\t" + str(acuracia_media) + "\t" 
+        + str(acuracia_dispersion) + "\t" + str(acuracia_defaultError) + "\t" + str(precision_media) + "\t" 
+        + str(precision_dispersion) + "\t" + str(precision_defaultError) + "\t" + str(recall_media) + "\t" 
+        + str(recall_dispersion) + "\t" + str(recall_defaultError) + "\t" + str(f1_score_media) + "\t" 
+        + str(f1_score_dispersion) + "\t" + str(f1_score_defaultError));
+    
+    learFactorLogFile.write(learnTestsString);
     learnFactor += learFactorPass;
-  
+    
+    
   interationLogFile.close();
   bateryLogFile.close();
-  # learFactorLogFile.close();
+  learFactorLogFile.close();
+  
+  dateNow2 = datetime.now();
+  passTime = dateNow - dateNow2;
+  passTimeInSec = passTime.total_seconds();
+  passDays    = divmod(duration_in_s, 86400);    
+  passHours   = divmod(days[1], 3600);               
+  passMinutes = divmod(hours[1], 60);                
+  passSeconds = divmod(minutes[1], 1);   
+  print("Time between dates: %d days, %d hours, %d minutes and %d seconds" % (days[0], hours[0], minutes[0], seconds[0]))
+  print('Runtime, calculate at %d days, %d hours, %d minutes and %d seconds' % 
+    (passDays[0], passHours[0], passMinutes[0], passSeconds[0]))
   # resumeLogFile.close();
 
   
