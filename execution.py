@@ -71,11 +71,11 @@ class Execution:
       results.append(resultInteration);
       
       upOrDownPredictStr = 'down';
-      if predict > 0:
+      if predict >= 0:
         upOrDownPredictStr = 'up';
         
       upOrDownResultStr = 'down';
-      if result > 0:
+      if result >= 0:
         upOrDownResultStr = 'up';
         
       testsLogStr = ('Test: ' + str(count) + '-' + str(numLinesOfTest) + '  ---  ' + str(percetsProgress) + '% --- ' 

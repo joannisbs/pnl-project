@@ -44,7 +44,7 @@ def main():
     
   learFactorLogFile.write(learnTestsString);
       
-  learnFactor = 0.01;
+  learnFactor = 0.1;
   learFactorPass = 0.03;
   learnFactorMax = 0.8;
   
@@ -55,7 +55,7 @@ def main():
     scoresValues = [];
     
     
-    for index in range(9):
+    for index in range(4):
       print( 'learn :' + str(learnFactor) + ' interation: ' + str(index));
       accuracy, precision, recall, f1_score = newInteration(lines, learnFactor, interationLogFile);
       bateryTestsString = (str(learnFactor) + "\t" + str(index) + "\t" + str(accuracy) + "\t" 
@@ -69,11 +69,11 @@ def main():
 
     acuracia_media, acuracia_dispersion, acuracia_defaultError = Measures.valueStatistic(accuracyValues);
     
-    precision_media, precision_dispersion, precision_defaultError = Measures.valueStatistic(accuracyValues);
+    precision_media, precision_dispersion, precision_defaultError = Measures.valueStatistic(precisionValues);
     
-    recall_media, recall_dispersion, recall_defaultError = Measures.valueStatistic(accuracyValues);
+    recall_media, recall_dispersion, recall_defaultError = Measures.valueStatistic(recallValues);
     
-    f1_score_media, f1_score_dispersion, f1_score_defaultError = Measures.valueStatistic(accuracyValues);
+    f1_score_media, f1_score_dispersion, f1_score_defaultError = Measures.valueStatistic(scoresValues);
     
     learnTestsString = (str(learnFactor) + "\t" + str(acuracia_media) + "\t" 
         + str(acuracia_dispersion) + "\t" + str(acuracia_defaultError) + "\t" + str(precision_media) + "\t" 
@@ -112,7 +112,7 @@ def newInteration(lines, learnFactor, logger):
 
   execution.training(linesTraining);
   results = execution.testing(linesTeste);
-  # print(results);
+  print(results);
 
   tableResults = Measures.getTableResults(results);
   

@@ -10,15 +10,15 @@ class Measures:
     trueNegatives = 0;
 
     for res in results:
-      if res["predict"] >= 0:
-        if res["result"] >= 0:
+      if res["predict"] >= 0:   # previsao up
+        if res["result"] >= 0:  # result up
           truePositives += 1;
-        else:
+        else:                   # result down
           falsePositives +=1;
-      else:
-        if res["result"] >= 0:
+      else:                     # previsao down
+        if res["result"] >= 0:  # result up
           falseNegatives += 1;
-        else:
+        else:                   # result down
           trueNegatives +=1;
           
     return { "truePositives": truePositives, "falsePositives": falsePositives, 
@@ -30,8 +30,10 @@ class Measures:
     falseNegatives = tableResults["falseNegatives"];
     trueNegatives = tableResults["trueNegatives"];
     
-    accuracyMeasure = (truePositives + trueNegatives) / (
-      truePositives + trueNegatives + falseNegatives + trueNegatives);
+    accuracyMeasure = (truePositives + trueNegatives) / 
+    (truePositives + falsePositives + falseNegatives + trueNegatives);
+    
+    # print('acuracia :', truePositives, falsePositives, falseNegatives, trueNegatives )
     
     return math.floor(accuracyMeasure * 100);
   
@@ -43,6 +45,7 @@ class Measures:
     
     precisionMeasure = (truePositives) / (truePositives + falsePositives);
     
+    # print('precisionMeasure :', truePositives, falsePositives, falseNegatives, trueNegatives )
     return math.floor(precisionMeasure * 100);
   
   def recall(tableResults):
