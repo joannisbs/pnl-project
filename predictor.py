@@ -7,14 +7,12 @@ from nltk.tokenize import sent_tokenize
 from nltk.corpus import stopwords as NltkStopWords
 from string import punctuation
 
-
 from memory import Memory;
-
-LEARN_FACTOR = 0.1;
 
 class FinancialPoliticalPredictor:
 
-  def __init__(this):
+  def __init__(this, learnFactor):
+    this.learnFactor = learnFactor;
     this.memory = Memory();
   
   def training(this, discurso, result):
@@ -109,7 +107,7 @@ class FinancialPoliticalPredictor:
         
   def __computeCorrection(this, predict, result, tfdifs, types):
     err = result - predict;
-    sistemicFactor = LEARN_FACTOR * err;
+    sistemicFactor = this.learnFactor * err;
     oldSistemicErr = this.memory.getDefaultSistemicCorrection();
     newSistemicErr = oldSistemicErr + sistemicFactor;
     this.memory.setDefaultSistemicCorrection(newSistemicErr);
@@ -122,7 +120,7 @@ class FinancialPoliticalPredictor:
       for tfdif in tdfis_word:
         relevance = relevance + tdfis_word[tfdif];
       # print(word, relevance)
-      factor = LEARN_FACTOR * err * relevance;
+      factor = this.learnFactor * err * relevance;
       newPeso = peso + factor;
       this.memory.setWeightToken(word, newPeso);
   

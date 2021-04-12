@@ -1,0 +1,22 @@
+Sorted from tests: 1 3 9 10 11 15 17 18 22 26 32 33 36 38 41 44 45 46 49 57 60
+Test: 1-21  ---  4% --- predict: -419 result: 22.05
+Test: 2-21  ---  9% --- predict: -518 result: 205.72
+Test: 3-21  ---  14% --- predict: -947 result: -253.84
+Test: 4-21  ---  19% --- predict: 509 result: -241.9
+Test: 5-21  ---  23% --- predict: 790 result: -147.93
+Test: 6-21  ---  28% --- predict: 1038 result: -185.08
+Test: 7-21  ---  33% --- predict: 510 result: -4.42
+Test: 8-21  ---  38% --- predict: -494 result: -4.42
+Test: 9-21  ---  42% --- predict: -2738 result: 201.32
+Test: 10-21  ---  47% --- predict: 1390 result: -994.14
+Test: 11-21  ---  52% --- predict: 341 result: 674.33
+Test: 12-21  ---  57% --- predict: 1375 result: -1024.31
+Test: 13-21  ---  61% --- predict: 1217 result: -1732.26
+Test: 14-21  ---  66% --- predict: -456 result: 1296.42
+Test: 15-21  ---  71% --- predict: -411 result: 616.89
+Test: 16-21  ---  76% --- predict: 432 result: 1086.1
+Test: 17-21  ---  80% --- predict: 709 result: 928.89
+Test: 18-21  ---  85% --- predict: 1400 result: 928.89
+Test: 19-21  ---  90% --- predict: 790 result: 915.11
+Test: 20-21  ---  95% --- predict: 675 result: 1330.08
+Test: 21-21  ---  100% --- predict: 153 result: 476.86

@@ -8,8 +8,9 @@ import math
 
 
 class Execution:
-  def __init__(this):
-    this.fpp = FinancialPoliticalPredictor();
+  def __init__(this, learnFactor, logger):
+    this.fpp = FinancialPoliticalPredictor(learnFactor);
+    this.logger = logger;
   
   def separateTrainingTestesLines(this, lines):
     linesTraining = [];
@@ -31,7 +32,11 @@ class Execution:
     print('Amount training: '+ str(len(linesTraining)));
     print('Amount testing: '+ str(len(linesTeste)));
     
-    print('\nSorted from tests: ' + str(" ".join(discursesIdsSorted)) + '\n')
+    sortedLogStr = 'Sorted from tests: ' + str(" ".join(discursesIdsSorted));
+    
+    this.logger.write(sortedLogStr);
+    
+    print('\n' + sortedLogStr + '\n')
     
     return linesTraining, linesTeste;
   
@@ -61,12 +66,22 @@ class Execution:
         "id": identifier,
         "result": result,
         "predict": predict,
-        "correct": isCorrectDirection,
       }
       
       results.append(resultInteration);
       
-      print('Test: ' + str(count) + '-' + str(numLinesOfTest) + '  ---  ' + str(percetsProgress) + '% --- ' 
-            + 'predict: ' + str(math.floor(predict)) + ' result: ' + str(result) + ' correct: ' + str(isCorrectDirection));
+      upOrDownPredictStr = 'down';
+      if predict > 0:
+        upOrDownPredictStr = 'up';
+        
+      upOrDownResultStr = 'down';
+      if result > 0:
+        upOrDownResultStr = 'up';
+        
+      testsLogStr = ('Test: ' + str(count) + '-' + str(numLinesOfTest) + '  ---  ' + str(percetsProgress) + '% --- ' 
+            + 'predict: ' + upOrDownPredictStr + ' result: ' + upOrDownResultStr);
+    
+      print(testsLogStr);
+      this.logger.write(testsLogStr);
       count += 1;
     return results;
