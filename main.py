@@ -23,39 +23,17 @@ def main():
 
   execution.training(linesTraining);
   results = execution.testing(linesTeste);
-  print(results);
+  # print(results);
 
-  # results = [
-  #   { "correct": True },
-    
-  #   { "correct": False },
-    
-  #   { "correct": True },
-    
-  #   { "correct": False },
-    
-  #   { "correct": True },
-    
-  #   { "correct": True },
-    
-  #   { "correct": True },
-    
-  #   { "correct": False },
-    
-  #   { "correct": True },
-    
-  #   { "correct": False },
-    
-  #   { "correct": True },
-    
-  #   { "correct": True },
-    
-  # ]
+  tableResults = Measures.getTableResults(results);
   
-  acuracy = math.floor(Measures.acuracia(results) * 100)
+  accuracy = Measures.accuracy(tableResults)
+  precision = Measures.precision(tableResults)
+  recall = Measures.recall(tableResults)
+  f1_score = Measures.f1_score(precision, recall)
   
-  
-  print('acuracy: ' + str(acuracy) + '%')
+  print('\naccuracy: ' + str(accuracy) + '% ' + 'precision: ' + str(precision) 
+        + '% ' + 'recall: ' + str(recall) + '% ' + 'f1_score: ' + str(f1_score) + '%')
 
 
 
@@ -150,18 +128,61 @@ class Utils:
     return text, resultFormated, identifier;
   
 class Measures:
-  def acuracia(results):
-    corrects = 0;
+  def getTableResults(results):
+    truePositives = 0;
+    falsePositives = 0;
+    falseNegatives = 0;
+    trueNegatives = 0;
+
     for res in results:
-      if res["correct"]:
-        corrects += 1;
-    return corrects/float(len(results));
-  def recall(results):
-    corrects = 0;
-    for res in results:
-      if res["correct"]:
-        corrects += 1;
-    return corrects/float(len(results));
+      if res["predict"] >= 0:
+        if res["result"] >= 0:
+          truePositives += 1;
+        else:
+          falsePositives +=1;
+      else:
+        if res["result"] >= 0:
+          falseNegatives += 1;
+        else:
+          trueNegatives +=1;
+          
+    return { "truePositives": truePositives, "falsePositives": falsePositives, 
+            "trueNegatives":trueNegatives, "falseNegatives":falseNegatives};
+    
+  def accuracy(tableResults):
+    truePositives = tableResults["truePositives"];
+    falsePositives = tableResults["falsePositives"];
+    falseNegatives = tableResults["falseNegatives"];
+    trueNegatives = tableResults["trueNegatives"];
+    
+    accuracyMeasure = (truePositives + trueNegatives) / (
+      truePositives + trueNegatives + falseNegatives + trueNegatives);
+    
+    return math.floor(accuracyMeasure * 100);
+  
+  def precision(tableResults):
+    truePositives = tableResults["truePositives"];
+    falsePositives = tableResults["falsePositives"];
+    falseNegatives = tableResults["falseNegatives"];
+    trueNegatives = tableResults["trueNegatives"];
+    
+    precisionMeasure = (truePositives) / (truePositives + falsePositives);
+    
+    return math.floor(precisionMeasure * 100);
+  
+  def recall(tableResults):
+    truePositives = tableResults["truePositives"];
+    falsePositives = tableResults["falsePositives"];
+    falseNegatives = tableResults["falseNegatives"];
+    trueNegatives = tableResults["trueNegatives"];
+    
+    recallMeasure = (truePositives) / (truePositives + falseNegatives);
+    
+    return math.floor(recallMeasure * 100);
+  
+  def f1_score(precision, recall):
+    f1Measure = (2 * precision * recall) / (precision + recall)
+    return math.floor(f1Measure);
 
 
 
