@@ -37,16 +37,16 @@ def main():
   bateryLogFile.write(bateryTestsString);
   
   learnTestsString = ("learnFactor" + "\t" + "acuracia_media" + "\t" 
-        + "acuracia_dispersion" + "\t" + "acuracia_defaultError" + "precision_media" + "\t" 
-        + "precision_dispersion" + "\t" + "precision_defaultError" + "recall_media" + "\t" 
-        + "recall_dispersion" + "\t" + "recall_defaultError" + "f1_score_media" + "\t" 
+        + "acuracia_dispersion" + "\t" + "acuracia_defaultError" + "\t" + "precision_media" + "\t" 
+        + "precision_dispersion" + "\t" + "precision_defaultError" + "\t" + "recall_media" + "\t" 
+        + "recall_dispersion" + "\t" + "recall_defaultError" + "\t" + "f1_score_media" + "\t" 
         + "f1_score_dispersion" + "\t" + "f1_score_defaultError");
     
   learFactorLogFile.write(learnTestsString);
       
   learnFactor = 0.1;
-  learFactorPass = 0.03;
-  learnFactorMax = 0.8;
+  learFactorPass = 0.05;
+  learnFactorMax = 0.4;
   
   while learnFactor < learnFactorMax:
     accuracyValues = [];
@@ -55,7 +55,7 @@ def main():
     scoresValues = [];
     
     
-    for index in range(4):
+    for index in range(10):
       print( 'learn :' + str(learnFactor) + ' interation: ' + str(index));
       accuracy, precision, recall, f1_score = newInteration(lines, learnFactor, interationLogFile);
       bateryTestsString = (str(learnFactor) + "\t" + str(index) + "\t" + str(accuracy) + "\t" 
@@ -92,7 +92,7 @@ def main():
   dateNow2 = datetime.now();
   passTime = dateNow - dateNow2;
   passTimeInSec = passTime.total_seconds();
-  passDays    = divmod(duration_in_s, 86400);    
+  passDays    = divmod(passTimeInSec, 86400);    
   passHours   = divmod(days[1], 3600);               
   passMinutes = divmod(hours[1], 60);                
   passSeconds = divmod(minutes[1], 1);   

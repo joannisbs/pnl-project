@@ -30,8 +30,8 @@ class Measures:
     falseNegatives = tableResults["falseNegatives"];
     trueNegatives = tableResults["trueNegatives"];
     
-    accuracyMeasure = (truePositives + trueNegatives) / 
-    (truePositives + falsePositives + falseNegatives + trueNegatives);
+    accuracyMeasure = (truePositives + trueNegatives) / (
+      truePositives + falsePositives + falseNegatives + trueNegatives);
     
     # print('acuracia :', truePositives, falsePositives, falseNegatives, trueNegatives )
     
