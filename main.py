@@ -4,18 +4,19 @@ import os
 
 from datetime import datetime
 
+import time
 from measures import Measures;
 
 from execution import Execution;
+import threading
 
-
-def main():
+def main(learnFactor):
   dateNow = datetime.now();
   dateNowFormated = dateNow.strftime('%Y-%m-%d %H:%M:%S')
   print('Start at: ' + dateNowFormated);
   
-  dirResutsName = dateNow.strftime('%Y-%m-%d_%H:%M');
-  dirName = './results/' + dirResutsName;
+  # dirResutsName = dateNow.strftime('%Y-%m-%d_%H:%M');
+  dirName = './results/' + 'predict2-' + str(learnFactor);
   
   try:
     os.mkdir(dirName);
@@ -44,18 +45,23 @@ def main():
     
   learFactorLogFile.write(learnTestsString);
       
-  learnFactor = 0.1;
-  learFactorPass = 0.05;
-  learnFactorMax = 0.4;
+  learnFactor = learnFactor;
+  learFactorPass = 0.2;
+  learnFactorMax = learnFactor + 0.1;
+  
   
   while learnFactor < learnFactorMax:
+    learnPercents = 100/((learnFactorMax - learnFactor)/learFactorPass);
+    print('learn is in ' + str(learnPercents) + '%');
     accuracyValues = [];
     precisionValues = [];
     recallValues = [];
     scoresValues = [];
     
     
-    for index in range(10):
+    for index in range(5):
+      interationPercents = (100 * index)/float(5);
+      print('interatction is in ' + str(interationPercents) + '%');
       print( 'learn :' + str(learnFactor) + ' interation: ' + str(index));
       accuracy, precision, recall, f1_score = newInteration(lines, learnFactor, interationLogFile);
       bateryTestsString = (str(learnFactor) + "\t" + str(index) + "\t" + str(accuracy) + "\t" 
@@ -96,7 +102,7 @@ def main():
   passHours   = divmod(days[1], 3600);               
   passMinutes = divmod(hours[1], 60);                
   passSeconds = divmod(minutes[1], 1);   
-  print("Time between dates: %d days, %d hours, %d minutes and %d seconds" % (days[0], hours[0], minutes[0], seconds[0]))
+
   print('Runtime, calculate at %d days, %d hours, %d minutes and %d seconds' % 
     (passDays[0], passHours[0], passMinutes[0], passSeconds[0]))
   # resumeLogFile.close();
@@ -137,8 +143,46 @@ class Logger:
   def close(this):
     this.file.close();
   
+# t3=threading.Thread(target=main)
+# t4=threading.Thread(target=main)
+
+def t1funct():
+  return main(0.005)
+
+def t2funct():
+  return main(0.2)
+
+def t3funct():
+  return main(0.3)
+
+def t4funct():
+  return main(0.4)
+
+t1=threading.Thread(target=t1funct)
+# t2=threading.Thread(target=t2funct)
+# t3=threading.Thread(target=t3funct)
+# t4=threading.Thread(target=t4funct)
+
+threads = [];
+threads.append(t1)
+# threads.append(t2)
+# threads.append(t3)
+# threads.append(t4)
+
+t1.start();
+# time.sleep(2)
+# t2.start();
+# time.sleep(2)
+# t3.start();
+# time.sleep(2)
+# t4.start();
+# time.sleep(2)
+# Wait for all threads to complete
+for t in threads:
+   t.join()
 
 
+# t3.start(0.3);
+# t4.start(0.4);
 
-
-main();
+# main();

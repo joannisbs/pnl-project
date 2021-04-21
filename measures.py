@@ -32,9 +32,7 @@ class Measures:
     
     accuracyMeasure = (truePositives + trueNegatives) / (
       truePositives + falsePositives + falseNegatives + trueNegatives);
-    
-    # print('acuracia :', truePositives, falsePositives, falseNegatives, trueNegatives )
-    
+        
     return math.floor(accuracyMeasure * 100);
   
   def precision(tableResults):
@@ -45,7 +43,6 @@ class Measures:
     
     precisionMeasure = (truePositives) / (truePositives + falsePositives);
     
-    # print('precisionMeasure :', truePositives, falsePositives, falseNegatives, trueNegatives )
     return math.floor(precisionMeasure * 100);
   
   def recall(tableResults):

@@ -1,0 +1,2 @@
+learnFactor	acuracia_media	acuracia_dispersion	acuracia_defaultError	precision_media	precision_dispersion	precision_defaultError	recall_media	recall_dispersion	recall_defaultError	f1_score_media	f1_score_dispersion	f1_score_defaultError
+0.001	50	10	4	55	11	4	28	10	4	37	10	4

@@ -1,0 +1,6 @@
+Taxa_aprendizado	Interação	Acuracia	Precisão	Recall	F1_score
+0.02	0	51	50	48	48
+0.02	1	47	48	51	49
+0.02	2	47	54	48	50
+0.02	3	55	52	35	41
+0.02	4	56	58	45	50

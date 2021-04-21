@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from predictor import FinancialPoliticalPredictor;
+from predictor2 import FinancialPoliticalPredictor;
 from utils import Utils;
 
 import math
